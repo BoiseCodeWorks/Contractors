@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using contracted.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,7 +31,13 @@ namespace contracted
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //Add DB Connection Service
             services.AddTransient<IDbConnection>(x => CreateDBContext());
+
+            //REGISTER ALL REPOS
+            services.AddTransient<ContractorsRepository>();
+            services.AddTransient<JobsRepository>();
         }
 
         //opens a connection to the database and returns the connection
