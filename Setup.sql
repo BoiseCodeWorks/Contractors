@@ -1,12 +1,29 @@
-USE contractedbcw;
+-- USE petshop226;
 
--- CREATE TABLE contractors
+-- CREATE TABLE users
 -- (
 --     id VARCHAR(255) NOT NULL,
+--     email VARCHAR(255) NOT NULL UNIQUE,
 --     name VARCHAR(255) NOT NULL,
+--     passwordHash VARCHAR(255) NOT NULL, 
 --     rate DECIMAL(5, 2) NOT NULL,
+--     skills VARCHAR(255),
+
+--     INDEX(email),
+
 --     PRIMARY KEY (id)
 -- );
+
+
+-- INSERT INTO users (id, email, name, passwordHash, rate, skills)
+-- VALUES ("hello-17", "j@j.com", "Jake", "shhhh", 170.99, "Numchuck Skills, Bo Staff Skills");
+
+SELECT * FROM users WHERE email = "j@j.com";
+
+-- INSERT INTO contractors (id, name, rate)
+-- VALUES ("hello-17", "Bob the Builder", 1234567.23);
+
+-- SELECT * FROM contractors WHERE id = "hello-17";
 
 -- CREATE TABLE jobs
 -- (

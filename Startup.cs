@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using contracted.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,12 +33,41 @@ namespace contracted
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            //Add DB Connection Service
+            //NOTE Add DB Connection Service
             services.AddTransient<IDbConnection>(x => CreateDBContext());
 
-            //REGISTER ALL REPOS
+            //NOTE SETUP AUTH SERVICE
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.Events.OnRedirectToLogin = (context) =>
+                    {
+                        context.Response.StatusCode = 401;
+                        return Task.CompletedTask;
+                    };
+                });
+
+            //NOTE SETUP CORS
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsDevPolicy", builder =>
+                {
+                    builder
+                        .WithOrigins(new string[]
+                        {
+                            "http://localhost:8080"
+                        })
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
+            });
+
+            //NOTE REGISTER ALL REPOS
             services.AddTransient<ContractorsRepository>();
             services.AddTransient<JobsRepository>();
+            services.AddTransient<AccountRepository>();
         }
 
         //opens a connection to the database and returns the connection
@@ -54,14 +84,17 @@ namespace contracted
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("CorsDevPolicy");
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseAuthentication();
             app.UseHttpsRedirection();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }

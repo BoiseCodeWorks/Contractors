@@ -11,7 +11,7 @@ namespace contracted.Models
         public string Name { get; set; }
 
         [Required]
-        [Range(1, 999)]
+        [Range(0, 999)]
         public decimal Rate { get; set; }
     }
 }

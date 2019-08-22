@@ -11,5 +11,7 @@ namespace contracted.Models
         public string Location { get; set; }
         [Required]
         public decimal Budget { get; set; }
+
+        public string CreatorId { get; set; }
     }
 }

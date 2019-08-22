@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using contracted.Models;
 using contracted.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace contracted.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ContractorsController : ControllerBase
@@ -22,6 +25,7 @@ namespace contracted.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Contractor>> Get()
         {
+            var x = new User();
             return Ok(_cr.GetALL());
         }
 
